@@ -7,7 +7,7 @@
 ![PyTorch](https://img.shields.io/badge/PyTorch-1.x-red.svg)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen.svg)
+![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen.svg)
 
 *A state-of-the-art deep learning framework for predicting functional consequences of protein isoforms induced by alternative splicing*
 
