@@ -248,9 +248,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- **Funding**: NIH R01GM123456, NSF DBI-1234567
-- **Compute Resources**: XSEDE Stampede2, Google Cloud Platform
-- **Collaborators**: Protein Data Bank, UniProt Consortium
+- **Funding**: xxx
+- **Compute Resources**: xxxx
+- **Collaborators**: xxx
 - **Community**: Thanks to all researchers who contributed to validation
 
 ## 📞 Contact
