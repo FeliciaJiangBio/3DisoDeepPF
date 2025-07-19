@@ -257,7 +257,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 📢 If you have any questions or feedback about this project, please feel free to contact us. We highly appreciate your suggestions!
 
-- 📧 **Email:** tjiang@surgery.cuhk.edu.hk, runhaozhao@nudt.edu.cn
+- 📧 **Email:** xinwang@cuhk.edu.hk, tjiang@surgery.cuhk.edu.hk, runhaozhao@nudt.edu.cn
 - 📝 **GitHub Issues:** For more technical inquiries, you can also create a new issue in our [GitHub repository](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues).
 
 
