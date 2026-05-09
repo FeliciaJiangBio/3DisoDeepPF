@@ -1,38 +1,91 @@
-# 🧬 3DisoDeepPF: Deep Learning for Protein Isoform Function Prediction
+# 🧬 3DisoDeepPF
 
-<div align="center">
+### An Isoform-Centric, Structure-Aware Framework for Protein Function Prediction
 
-![Python](https://img.shields.io/badge/python-v3.8+-blue.svg)
-![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)
-![PyTorch](https://img.shields.io/badge/PyTorch-1.x-red.svg)
-![License](https://img.shields.io/badge/License-MIT-green.svg)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
-![Coverage](https://img.shields.io/badge/coverage-85%25-brightgreen.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.8+-green.svg)](https://www.python.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-red.svg)](https://pytorch.org/)
+[![bioRxiv](https://img.shields.io/badge/bioRxiv-10.64898/2026.04.24.720502-orange.svg)](https://doi.org/10.64898/2026.04.24.720502)
 
-*A state-of-the-art deep learning framework for predicting functional consequences of protein isoforms induced by alternative splicing*
-
-[**📖 Documentation**](https://github.com/username/3DisoDeepPF/wiki) • [**🚀 Quick Start**](#quick-start) • [**📊 Results**](#results) • [**💡 Citation**](#citation)
-
-</div>
+> *"A novel computational framework that leverages deep learning to predict the functional impact of protein isoforms generated through alternative splicing events."*
 
 ---
 
-## 🌟 Overview
+## 📖 Abstract
 
-**3DisoDeepPF** (3D Isoform Deep Protein Function) is a novel computational framework that leverages deep learning to predict the functional impact of protein isoforms generated through alternative splicing events. By integrating 3D structural information with sequence-based features, our model provides unprecedented accuracy in functional annotation of splice variants.
+Protein function prediction (PFP) is essential for mechanistic insight, disease biology, and therapeutic development. Most existing approaches assign function using a single reference protein form per gene, overlooking functionally important variations across proteoforms.
 
-### 🎯 Key Features
+**3DisoDeepPF** (3D Isoform Deep Protein Function) addresses this gap by:
+- Resolving protein function at the **isoform level** explicitly
+- Integrating **multi-modal representations** (sequence, structure, motif, annotation)
+- Leveraging **graph neural networks** over protein similarity networks
+- Jointly predicting **GO terms and Pfam domains** with cross-modal enhancement
 
-- **🔬 Multi-modal Learning**: Combines sequence, structure, and evolutionary information
-- **🧠 Deep Neural Architecture**: Custom transformer-based model with attention mechanisms  
-- **⚡ High Performance**: 85%+ accuracy on benchmark datasets
-- **🔄 Alternative Splicing Focus**: Specialized for splice variant analysis
-- **📈 Scalable**: Handles proteome-wide predictions efficiently
-- **🌐 Web Interface**: User-friendly interface for researchers
+---
+
+## ✨ Key Features
+
+| Feature | Description |
+|---------|-------------|
+| 🧬 **Isoform-Centric Design** | Explicitly resolves protein function at the isoform resolution |
+| 🔬 **Multi-Modal Fusion** | Combines ESM embeddings, structural features, motifs, and annotations |
+| 🕸️ **Graph Neural Networks** | GCN/GAT architecture over sequence-structure similarity graphs |
+| ⚖️ **Adaptive Edge Weighting** | Learned combination of sequence (BLAST) and structure (TM-align/Foldseek) similarity |
+| 🔄 **Cross-Modal Learning** | Joint GO ↔ Pfam prediction with mutual enhancement |
+| 🎯 **Evidence Tracing** | Decomposes predictions into supporting topological and modal evidence |
+
+---
 
 ## 🏗️ Architecture
 
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     3DisoDeepPF Pipeline                         │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
+│  │   Sequence   │    │  Structure   │    │   Motif /    │      │
+│  │   (ESM)     │    │  (TM-align) │    │   Pfam      │      │
+│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘      │
+│         │                   │                   │                │
+│         ▼                   ▼                   ▼                │
+│  ┌─────────────────────────────────────────────────────────┐     │
+│  │           Gated Multi-Modal Feature Fusion             │     │
+│  │           (α_seq · ESM ⊕ α_str · Struct ⊕ α_motif)   │     │
+│  └─────────────────────────┬───────────────────────────┘     │
+│                            │                                   │
+│                            ▼                                   │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │           Graph Convolution Layers (GCN/GAT)            │   │
+│  │     Adaptive Edge Weighting: λ·Seq + (1-λ)·Struct     │   │
+│  └─────────────────────────┬───────────────────────────────┘   │
+│                            │                                   │
+│                            ▼                                   │
+│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌─────────┐ │
+│  │   GO-MF    │  │   GO-BP    │  │   GO-CC    │  │  Pfam   │ │
+│  │  Predictor │  │  Predictor │  │  Predictor │  │Predictor│ │
+│  └────────────┘  └────────────┘  └────────────┘  └─────────┘ │
+│                                                                  │
+└─────────────────────────────────────────────────────────────────┘
+```
 
+---
+
+## 📊 Performance
+
+Evaluated on **CAFA-aligned benchmarks** and **breast cancer isoform atlas**:
+
+| Task | Metric | 3DisoDeepPF | Best Baseline |
+|------|--------|:------------:|:-------------:|
+| **GO-MF** | Fmax | ✅ Highest | DeepGOPlus |
+| **GO-BP** | Fmax | ✅ Highest | DeepFRI |
+| **GO-CC** | Fmax | ✅ Highest | FunFams |
+| **Pfam** | Fmax | ✅ Highest | BLAST |
+| **All Tasks** | AUPR | ✅ Best | Competitive |
+
+> See our [bioRxiv paper](https://doi.org/10.64898/2026.04.24.720502) for detailed benchmark results.
+
+---
 
 ## 🚀 Quick Start
 
@@ -40,11 +93,11 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/3DisoDeepPF.git
+git clone https://github.com/FeliciaJiangBio/3DisoDeepPF.git
 cd 3DisoDeepPF
 
 # Create conda environment
-conda create -n 3disodeeppf python=3.8
+conda env create -f environment.yml
 conda activate 3disodeeppf
 
 # Install dependencies
@@ -54,218 +107,184 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
+### Run Demo
+
+```bash
+# Navigate to examples and run the demo
+cd examples
+python demo.py --num_proteins 500 --epochs 50
+```
+
 ### Basic Usage
 
 ```python
-from disodeeppf import IsoformPredictor
-import pandas as pd
+from 3disodeeppf.models import CrossModalGNN
+from 3disodeeppf.training import Trainer
 
-# Initialize the model
-predictor = IsoformPredictor(
-    model_path="models/3disodeeppf_v1.0.pth",
-    device="cuda"  # or "cpu"
+# Initialize model
+model = CrossModalGNN(
+    num_nodes=10000,
+    num_labels=30000,
+    embedding_dim=128,
+    esm_dim=512,
+    motif_dim=128,
+    hidden_dim=256,
+    num_layers=2,
 )
 
-# Load your protein sequences
-sequences = {
-    "ENST00000123456": "MKVLWAALLVTFLAGCQAKVEQAVETEPEPELRQQTEWQSGQRWELALGRFWDYLRWVQTLSEQVQEELLSSQVTQELRALMDETAQ...",
-    "ENST00000789012": "MKVLWAALLVTFLAGCQAKVEQAVETEPEPELRQQTEWQSGQRWELALGRFWDYLRWVQTLSEQVQEELLSSQVTQELRALM..."
-}
+# Train
+trainer = Trainer(
+    model=model,
+    train_mask=train_mask,
+    val_mask=val_mask,
+    test_mask=test_mask,
+    labels=labels,
+    learning_rate=0.01,
+)
 
-# Predict functions
-results = predictor.predict_batch(sequences)
+trainer.train(num_epochs=100)
 
-# Display results
-for transcript_id, prediction in results.items():
-    print(f"Transcript: {transcript_id}")
-    print(f"GO Terms: {prediction['go_terms'][:5]}")  # Top 5 predictions
-    print(f"Confidence: {prediction['confidence']:.3f}")
-    print("---")
+# Predict
+predictions = trainer.predict(node_indices)
 ```
 
-### Command Line Interface
-
-```bash
-# Single sequence prediction
-python -m disodeeppf predict \
-    --sequence "MKVLWAALLVTFLAG..." \
-    --output results.json
-
-# Batch prediction from FASTA
-python -m disodeeppf predict_batch \
-    --input sequences.fasta \
-    --output predictions.csv \
-    --format csv
-
-# Compare isoforms
-python -m disodeeppf compare \
-    --isoform1 "ENST00000123456" \
-    --isoform2 "ENST00000789012" \
-    --output comparison.html
-```
-
-## 📊 Results
-
-### Performance Metrics
-
-
-
-### Benchmark Comparison
-
-### Ablation Experiments
-
-### Case Study: BRCA1 Isoforms
-
-Our model successfully identified functional differences between BRCA1 isoforms:
-
-- **BRCA1-001** (canonical): DNA repair, cell cycle checkpoint
-- **BRCA1-002** (Δexon11): Reduced DNA binding, altered localization  
-- **BRCA1-003** (Δexon5-6): Loss of RING domain function
-
-## 🗂️ Dataset
-
-### Training Data
-- **75,000** manually curated protein isoforms
-- **12,000** experimentally validated splice variants
-- **Gene Ontology** annotations (BP, MF, CC)
-- **Pathway databases** (KEGG, Reactome, BioCarta)
-
-### Data Sources
-- UniProt/Swiss-Prot
-- Ensembl Genomes
-- GENCODE annotations
-- PDB structural data
-- AlphaFold structure predictions
-
-## 🧪 Methodology
-
-### Model Architecture
-
-
-
-### Training Strategy
-
-
+---
 
 ## 📁 Repository Structure
 
 ```
 3DisoDeepPF/
-├── 📁 src/disodeeppf/           # Main source code
-│   ├── models/                  # Neural network architectures  
-│   ├── data/                    # Data processing utilities
-│   ├── training/                # Training scripts
-│   └── evaluation/              # Evaluation metrics
-├── 📁 data/                     # Dataset files
-│   ├── raw/                     # Raw downloaded data
-│   ├── processed/               # Preprocessed features
-│   └── splits/                  # Train/val/test splits
-├── 📁 models/                   # Trained model checkpoints
-├── 📁 notebooks/                # Jupyter analysis notebooks
-├── 📁 scripts/                  # Utility scripts
-├── 📁 tests/                    # Unit tests
-├── 📁 docs/                     # Documentation
-├── 📄 requirements.txt          # Python dependencies
-├── 📄 environment.yml           # Conda environment
-└── 📄 setup.py                  # Package setup
+├── src/3disodeeppf/              # Main source code
+│   ├── models/
+│   │   ├── gnn.py               # CrossModalGNN architecture
+│   │   ├── esm_encoder.py       # ESM feature extraction
+│   │   └── multi_modal_fusion.py # Gated fusion module
+│   ├── data/
+│   │   ├── dataset.py            # Dataset classes
+│   │   └── protein_graph.py     # Graph construction
+│   ├── training/
+│   │   └── trainer.py            # Training loop
+│   └── evaluation/
+│       └── metrics.py            # Fmax, AUPR, per-label metrics
+│
+├── examples/
+│   ├── demo.py                   # Demo with synthetic data
+│   └── predict.py                # Prediction script
+│
+├── scripts/
+│   └── train.py                  # Training script
+│
+├── tests/
+│   └── test_models.py            # Unit tests
+│
+├── requirements.txt
+├── environment.yml
+├── setup.py
+└── README.md
 ```
 
-## 🔬 Advanced Usage
+---
 
-### Custom Model Training
+## 🔬 Methodology Highlights
 
-```python
-from disodeeppf.training import Trainer
-from disodeeppf.models import IsoformTransformer
+### Multi-Modal Graph Construction
 
-# Configure model
-config = {
-    'hidden_dim': 512,
-    'num_layers': 12,
-    'num_heads': 8,
-    'dropout': 0.1,
-    'num_classes': 50000  # GO terms
-}
+We construct protein similarity graphs integrating:
+- **Sequence similarity**: BLASTP e-value < 1e-3
+- **Structure similarity**: TM-score via Foldseek/TM-align
 
-model = IsoformTransformer(**config)
+Combined using learned mixing parameter λ:
 
-# Setup trainer
-trainer = Trainer(
-    model=model,
-    train_loader=train_loader,
-    val_loader=val_loader,
-    optimizer='AdamW',
-    learning_rate=1e-4,
-    scheduler='cosine'
-)
-
-# Train model
-trainer.fit(epochs=100)
+```
+A_ij = λ · A_seq + (1 - λ) · A_struct
 ```
 
-### Feature Visualization
+### Gated Multi-Modal Fusion
 
-```python
-from disodeeppf.visualization import FeatureVisualizer
+Feature contributions are dynamically weighted:
 
-visualizer = FeatureVisualizer(model)
-
-# Generate attention maps
-attention_map = visualizer.plot_attention(
-    sequence="MKVLWAALLVTFLAG...",
-    save_path="attention_visualization.png"
-)
-
-# 3D structure mapping
-structure_map = visualizer.map_to_structure(
-    pdb_id="1BRF",
-    predictions=results,
-    color_by="confidence"
-)
+```
+h_final = Σ_k α_k · σ(W_k · h_k)
 ```
 
+where α_k are softmax-normalized gating weights.
 
+### Focal Loss for Class Imbalance
 
-## 📚 Citation
+Address label imbalance with focal loss:
 
-If you use 3DisoDeepPF in your research, please cite our paper:
+```
+L = -Σ_c w_c · [(1-p_c)^γ · log(p_c)]
+```
+
+### Evidence Tracing
+
+Decompose predictions into:
+- **Topological support**: Contributing graph neighbors
+- **Modal evidence**: Gating weights per modality
+
+---
+
+## 📚 Datasets
+
+| Dataset | Proteins | Description |
+|---------|----------|-------------|
+| **CAFA-Aligned Benchmark** | 76,804 | Swiss-Prot + PDB + AlphaFoldDB |
+| **3DisoGalaxy Atlas** | 46,411 | Breast cancer isoforms |
+
+> Visit our web portals: [3DisoDeepPF](http://3disodeeppf.com/) | [3DisoGalaxy](http://3disogalaxy.com/)
+
+---
+
+## 📄 Citation
+
+If 3DisoDeepPF contributes to your research, please cite:
 
 ```bibtex
 @article{3disodeeppf2026,
-    title={An Isoform-Centric, Structure-Aware Framework for Protein Function Prediction
-           and Evaluation, Instantiated in 3DisoDeepPF},
-    author={Jiang, F.T. and Zhao, R. and Liang, F. and et al.},
+    title={An Isoform-Centric, Structure-Aware Framework for Protein Function
+           Prediction and Evaluation, Instantiated in 3DisoDeepPF},
+    author={Jiang, F.T. and Zhao, R. and Liang, F. and Cui, T. and
+            Zhang, Y. and Zhao, X. and Xu, M. and Shuai, Y. and
+            Luo, T. and Wang, X. and Tang, J. and Yao, H. and Xu, C.
+            and Wang, Z. and Zeng, W. and Xu, J. and Tang, Z. and
+            Zhang, W. and Heng, P.A. and Li, Y. and Wang, X.},
     journal={bioRxiv},
     year={2026},
     doi={10.64898/2026.04.24.720502}
 }
 ```
 
+---
+
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License. See [LICENSE](LICENSE) for details.
+
+---
 
 ## 🙏 Acknowledgments
 
-- **Funding**: xxx
-- **Compute Resources**: xxxx
-- **Collaborators**: xxx
-- **Community**: Thanks to all researchers who contributed to validation
+This work was supported by the Faculty of Medicine at The Chinese University of Hong Kong and collaborative contributions from Peking University and the National University of Defense Technology.
+
+---
 
 ## 📞 Contact
 
-📢 If you have any questions or feedback about this project, please feel free to contact us. We highly appreciate your suggestions!
+For questions, collaborations, or feedback:
 
-- 📧 **Email:** xinwang@cuhk.edu.hk, tjiang@surgery.cuhk.edu.hk, runhaozhao@nudt.edu.cn
-- 📝 **GitHub Issues:** For more technical inquiries, you can also create a new issue in our [GitHub repository](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues).
+| Person | Email | Role |
+|--------|-------|------|
+| **Felicia T. Jiang** | tjiang@surgery.cuhk.edu.hk | Lead Author |
+| **Runhao Zhao** | runhaozhao@nudt.edu.cn | Co-Author |
+| **Xin Wang** | xinwang@cuhk.edu.hk | Corresponding Author |
 
+🐛 [Report Issues](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues) • ✨ [Request Features](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues)
 
 ---
 
 <div align="center">
 
-**⭐ Star us on GitHub — it motivates us a lot!**
-
-[**🐛 Report Bug**](https://github.com/username/3DisoDeepPF/issues) • [**✨ Request Feature**](https://github.com/username/3DisoDeepPF/issues) • [**📖 Documentation**](https://github.com/username/3DisoDeepPF/wiki)
+**⭐ Star us on GitHub if 3DisoDeepPF is useful to your research!**
 
 </div>
