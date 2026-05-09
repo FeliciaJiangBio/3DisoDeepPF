@@ -58,16 +58,7 @@ Protein function prediction (PFP) is essential for mechanistic insight, disease 
 >
 > **c, d, Performance comparison** across five bootstrap iterations.
 
-| 📊 **Fig. 1c** | 📊 **Fig. 1d** |
-|:--------------:|:--------------:|
-| GO-MF/GO-BP/GO-CC/Pfam Fmax | CAFA AUPR Comparison |
-
-```
-📁 images/
-├── fig1a_framework_overview.png   # Main framework diagram
-├── fig1c_fmax_comparison.png     # Fmax dot plots
-└── fig1d_aupr_comparison.png     # AUPR bar plots
-```
+![Figure 1a: Framework Overview](images/fig1a_framework_overview.png)
 
 ---
 
@@ -79,9 +70,13 @@ Evaluated on **CAFA-aligned benchmarks** and **breast cancer isoform atlas**:
 
 > Dot plots of protein-centric Fmax scores across five bootstrap iterations, summarized across all test proteins and all GO and Pfam terms.
 
+![Figure 1c: Fmax Comparison](images/fig1c_fmax_comparison.png)
+
 ### Figure 1d | Function-Centric AUPR
 
 > Bar plots of function-centric AUPR across methods for GO-MF, GO-BP, GO-CC and Pfam.
+
+![Figure 1d: AUPR Comparison](images/fig1d_aupr_comparison.png)
 
 | Task | Metric | 3DisoDeepPF | Best Baseline |
 |------|--------|:------------:|:-------------:|
@@ -90,12 +85,6 @@ Evaluated on **CAFA-aligned benchmarks** and **breast cancer isoform atlas**:
 | **GO-CC** | Fmax | ✅ Highest | FunFams |
 | **Pfam** | Fmax | ✅ Highest | BLAST |
 | **All Tasks** | AUPR | ✅ Best | Competitive |
-
-```
-📁 images/
-├── fig1c_fmax_dotplots.png
-└── fig1d_aupr_bars.png
-```
 
 ---
 
@@ -144,20 +133,19 @@ Decompose predictions into:
 ### Figure 2 | Breast Cancer Isoform Landscape
 
 > **a, Two-dimensional embedding** of the breast cancer isoform similarity graph, colored by the 15 most frequent Pfam domains.
->
+
+![Figure 2a: Dataset Visualization](images/fig2a_dataset_visualization.png)
+
 > **b, c, Function-centric AUPR and protein-centric Fmax** for GO-MF, GO-BP, GO-CC and Pfam across methods.
+
+| AUPR Comparison | Fmax Comparison |
+|:---------------:|:---------------:|
+| ![Figure 2b: Isoform AUPR](images/fig2b_aupr_isoform.png) | ![Figure 2c: Isoform Fmax](images/fig2c_fmax_isoform.png) |
 
 | Dataset | Proteins | Description |
 |---------|----------|-------------|
 | **CAFA-Aligned Benchmark** | 76,804 | Swiss-Prot + PDB + AlphaFoldDB |
 | **3DisoGalaxy Atlas** | 46,411 | Breast cancer isoforms |
-
-```
-📁 images/
-├── fig2a_embedding_visualization.png
-├── fig2b_aupr_isoform.png
-└── fig2c_fmax_isoform.png
-```
 
 ---
 
@@ -228,12 +216,13 @@ predictions = trainer.predict(node_indices)
 
 ```
 3DisoDeepPF/
-├── images/                      # Paper figures (add your screenshots here)
-│   ├── README_images.md         # Instructions for adding figures
+├── images/                      # Paper figures
 │   ├── fig1a_framework_overview.png
 │   ├── fig1c_fmax_comparison.png
 │   ├── fig1d_aupr_comparison.png
-│   └── fig2_breast_cancer_atlas.png
+│   ├── fig2a_dataset_visualization.png
+│   ├── fig2b_aupr_isoform.png
+│   └── fig2c_fmax_isoform.png
 │
 ├── src/3disodeeppf/              # Main source code
 │   ├── models/
