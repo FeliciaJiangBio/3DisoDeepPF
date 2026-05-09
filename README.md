@@ -52,11 +52,6 @@ Protein function prediction (PFP) is essential for mechanistic insight, disease 
 
 ### Figure 1 | Framework, Benchmark Construction and Performance
 
-> **a, Overview of 3DisoDeepPF.** Sequence and structure features are fused in a protein similarity graph to predict GO and Pfam annotations.
->
-> **b, Assembly of a CAFA-aligned, structure-supported benchmark** from Swiss-Prot, the PDB and AlphaFoldDB.
->
-> **c, d, Performance comparison** across five bootstrap iterations.
 
 ![Figure 1a: Framework Overview](images/fig1a_framework_overview.png)
 
@@ -294,19 +289,14 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 ## 🙏 Acknowledgments
 
-This work was supported by the Faculty of Medicine at The Chinese University of Hong Kong and collaborative contributions from Peking University and the National University of Defense Technology.
-
----
+Thanks to all researchers who contributed to validation
 
 ## 📞 Contact
 
 For questions, collaborations, or feedback:
 
-| Person | Email | Role |
-|--------|-------|------|
-| **Felicia T. Jiang** | tjiang@surgery.cuhk.edu.hk | Lead Author |
-| **Runhao Zhao** | runhaozhao@nudt.edu.cn | Co-Author |
-| **Xin Wang** | xinwang@cuhk.edu.hk | Corresponding Author |
+- 📧 **Email:** xinwang@cuhk.edu.hk, tjiang@surgery.cuhk.edu.hk, runhaozhao@nudt.edu.cn
+- 📝 **GitHub Issues:** For more technical inquiries, you can also create a new issue in our [GitHub repository](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues).
 
 🐛 [Report Issues](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues) • ✨ [Request Features](https://github.com/FeliciaJiangBio/3DisoDeepPF/issues)
 
@@ -315,7 +305,5 @@ For questions, collaborations, or feedback:
 <div align="center">
 
 **⭐ Star us on GitHub if 3DisoDeepPF is useful to your research!**
-
-**[http://3disodeeppf.com/](http://3disodeeppf.com/)** | **[http://3disogalaxy.com/](http://3disogalaxy.com/)**
 
 </div>
