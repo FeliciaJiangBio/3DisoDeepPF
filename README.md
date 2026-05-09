@@ -231,14 +231,13 @@ structure_map = visualizer.map_to_structure(
 If you use 3DisoDeepPF in your research, please cite our paper:
 
 ```bibtex
-@article{3disodeeppf2024,
-    title={3DisoDeepPF: Deep Learning Framework for Predicting Functional Impact of Protein Isoforms from Alternative Splicing},
-    author={A. and B. and C},
-    journal={Science},
-    year={2025},
-    volume={10},
-    pages={123-135},
-    doi={xxx}
+@article{3disodeeppf2026,
+    title={An Isoform-Centric, Structure-Aware Framework for Protein Function Prediction
+           and Evaluation, Instantiated in 3DisoDeepPF},
+    author={Jiang, F.T. and Zhao, R. and Liang, F. and et al.},
+    journal={bioRxiv},
+    year={2026},
+    doi={10.64898/2026.04.24.720502}
 }
 ```
 
