@@ -11,6 +11,18 @@
 
 ---
 
+## 🌐 Interactive Web Portal
+
+### 👉 **[http://3disodeeppf.com/](http://3disodeeppf.com/)**
+
+Explore our interactive visualization portal featuring:
+- 🔮 **3D Embedding Viewer** - Navigate protein similarity graphs
+- 🧬 **Isoform Comparison** - Compare annotations across isoforms
+- 📊 **Prediction Browser** - Search and filter predictions
+- 🎯 **Evidence Tracing** - View supporting neighbors for each prediction
+
+---
+
 ## 📖 Abstract
 
 Protein function prediction (PFP) is essential for mechanistic insight, disease biology, and therapeutic development. Most existing approaches assign function using a single reference protein form per gene, overlooking functionally important variations across proteoforms.
@@ -36,37 +48,25 @@ Protein function prediction (PFP) is essential for mechanistic insight, disease 
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Framework Overview
+
+### Figure 1 | Framework, Benchmark Construction and Performance
+
+> **a, Overview of 3DisoDeepPF.** Sequence and structure features are fused in a protein similarity graph to predict GO and Pfam annotations.
+>
+> **b, Assembly of a CAFA-aligned, structure-supported benchmark** from Swiss-Prot, the PDB and AlphaFoldDB.
+>
+> **c, d, Performance comparison** across five bootstrap iterations.
+
+| 📊 **Fig. 1c** | 📊 **Fig. 1d** |
+|:--------------:|:--------------:|
+| GO-MF/GO-BP/GO-CC/Pfam Fmax | CAFA AUPR Comparison |
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                     3DisoDeepPF Pipeline                         │
-├─────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌──────────────┐    ┌──────────────┐    ┌──────────────┐      │
-│  │   Sequence   │    │  Structure   │    │   Motif /    │      │
-│  │   (ESM)     │    │  (TM-align) │    │   Pfam      │      │
-│  └──────┬───────┘    └──────┬───────┘    └──────┬───────┘      │
-│         │                   │                   │                │
-│         ▼                   ▼                   ▼                │
-│  ┌─────────────────────────────────────────────────────────┐     │
-│  │           Gated Multi-Modal Feature Fusion             │     │
-│  │           (α_seq · ESM ⊕ α_str · Struct ⊕ α_motif)   │     │
-│  └─────────────────────────┬───────────────────────────┘     │
-│                            │                                   │
-│                            ▼                                   │
-│  ┌─────────────────────────────────────────────────────────┐   │
-│  │           Graph Convolution Layers (GCN/GAT)            │   │
-│  │     Adaptive Edge Weighting: λ·Seq + (1-λ)·Struct     │   │
-│  └─────────────────────────┬───────────────────────────────┘   │
-│                            │                                   │
-│                            ▼                                   │
-│  ┌────────────┐  ┌────────────┐  ┌────────────┐  ┌─────────┐ │
-│  │   GO-MF    │  │   GO-BP    │  │   GO-CC    │  │  Pfam   │ │
-│  │  Predictor │  │  Predictor │  │  Predictor │  │Predictor│ │
-│  └────────────┘  └────────────┘  └────────────┘  └─────────┘ │
-│                                                                  │
-└─────────────────────────────────────────────────────────────────┘
+📁 images/
+├── fig1a_framework_overview.png   # Main framework diagram
+├── fig1c_fmax_comparison.png     # Fmax dot plots
+└── fig1d_aupr_comparison.png     # AUPR bar plots
 ```
 
 ---
@@ -74,6 +74,14 @@ Protein function prediction (PFP) is essential for mechanistic insight, disease 
 ## 📊 Performance
 
 Evaluated on **CAFA-aligned benchmarks** and **breast cancer isoform atlas**:
+
+### Figure 1c | Protein-Centric Fmax Scores
+
+> Dot plots of protein-centric Fmax scores across five bootstrap iterations, summarized across all test proteins and all GO and Pfam terms.
+
+### Figure 1d | Function-Centric AUPR
+
+> Bar plots of function-centric AUPR across methods for GO-MF, GO-BP, GO-CC and Pfam.
 
 | Task | Metric | 3DisoDeepPF | Best Baseline |
 |------|--------|:------------:|:-------------:|
@@ -83,7 +91,73 @@ Evaluated on **CAFA-aligned benchmarks** and **breast cancer isoform atlas**:
 | **Pfam** | Fmax | ✅ Highest | BLAST |
 | **All Tasks** | AUPR | ✅ Best | Competitive |
 
-> See our [bioRxiv paper](https://doi.org/10.64898/2026.04.24.720502) for detailed benchmark results.
+```
+📁 images/
+├── fig1c_fmax_dotplots.png
+└── fig1d_aupr_bars.png
+```
+
+---
+
+## 🔬 Methodology Highlights
+
+### Multi-Modal Graph Construction
+
+We construct protein similarity graphs integrating:
+- **Sequence similarity**: BLASTP e-value < 1e-3
+- **Structure similarity**: TM-score via Foldseek/TM-align
+
+Combined using learned mixing parameter λ:
+
+```
+A_ij = λ · A_seq + (1 - λ) · A_struct
+```
+
+### Gated Multi-Modal Fusion
+
+Feature contributions are dynamically weighted:
+
+```
+h_final = Σ_k α_k · σ(W_k · h_k)
+```
+
+where α_k are softmax-normalized gating weights.
+
+### Focal Loss for Class Imbalance
+
+Address label imbalance with focal loss:
+
+```
+L = -Σ_c w_c · [(1-p_c)^γ · log(p_c)]
+```
+
+### Evidence Tracing
+
+Decompose predictions into:
+- **Topological support**: Contributing graph neighbors
+- **Modal evidence**: Gating weights per modality
+
+---
+
+## 🧬 Dataset Overview
+
+### Figure 2 | Breast Cancer Isoform Landscape
+
+> **a, Two-dimensional embedding** of the breast cancer isoform similarity graph, colored by the 15 most frequent Pfam domains.
+>
+> **b, c, Function-centric AUPR and protein-centric Fmax** for GO-MF, GO-BP, GO-CC and Pfam across methods.
+
+| Dataset | Proteins | Description |
+|---------|----------|-------------|
+| **CAFA-Aligned Benchmark** | 76,804 | Swiss-Prot + PDB + AlphaFoldDB |
+| **3DisoGalaxy Atlas** | 46,411 | Breast cancer isoforms |
+
+```
+📁 images/
+├── fig2a_embedding_visualization.png
+├── fig2b_aupr_isoform.png
+└── fig2c_fmax_isoform.png
+```
 
 ---
 
@@ -154,6 +228,13 @@ predictions = trainer.predict(node_indices)
 
 ```
 3DisoDeepPF/
+├── images/                      # Paper figures (add your screenshots here)
+│   ├── README_images.md         # Instructions for adding figures
+│   ├── fig1a_framework_overview.png
+│   ├── fig1c_fmax_comparison.png
+│   ├── fig1d_aupr_comparison.png
+│   └── fig2_breast_cancer_atlas.png
+│
 ├── src/3disodeeppf/              # Main source code
 │   ├── models/
 │   │   ├── gnn.py               # CrossModalGNN architecture
@@ -185,54 +266,13 @@ predictions = trainer.predict(node_indices)
 
 ---
 
-## 🔬 Methodology Highlights
+## 🌐 Related Resources
 
-### Multi-Modal Graph Construction
-
-We construct protein similarity graphs integrating:
-- **Sequence similarity**: BLASTP e-value < 1e-3
-- **Structure similarity**: TM-score via Foldseek/TM-align
-
-Combined using learned mixing parameter λ:
-
-```
-A_ij = λ · A_seq + (1 - λ) · A_struct
-```
-
-### Gated Multi-Modal Fusion
-
-Feature contributions are dynamically weighted:
-
-```
-h_final = Σ_k α_k · σ(W_k · h_k)
-```
-
-where α_k are softmax-normalized gating weights.
-
-### Focal Loss for Class Imbalance
-
-Address label imbalance with focal loss:
-
-```
-L = -Σ_c w_c · [(1-p_c)^γ · log(p_c)]
-```
-
-### Evidence Tracing
-
-Decompose predictions into:
-- **Topological support**: Contributing graph neighbors
-- **Modal evidence**: Gating weights per modality
-
----
-
-## 📚 Datasets
-
-| Dataset | Proteins | Description |
-|---------|----------|-------------|
-| **CAFA-Aligned Benchmark** | 76,804 | Swiss-Prot + PDB + AlphaFoldDB |
-| **3DisoGalaxy Atlas** | 46,411 | Breast cancer isoforms |
-
-> Visit our web portals: [3DisoDeepPF](http://3disodeeppf.com/) | [3DisoGalaxy](http://3disogalaxy.com/)
+| Resource | Link | Description |
+|----------|------|-------------|
+| 🔮 **3DisoDeepPF Portal** | [http://3disodeeppf.com/](http://3disodeeppf.com/) | Interactive prediction portal |
+| 🧬 **3DisoGalaxy Atlas** | [http://3disogalaxy.com/](http://3disogalaxy.com/) | Breast cancer isoform database |
+| 📄 **Paper** | [bioRxiv](https://doi.org/10.64898/2026.04.24.720502) | Full methodology paper |
 
 ---
 
@@ -286,5 +326,7 @@ For questions, collaborations, or feedback:
 <div align="center">
 
 **⭐ Star us on GitHub if 3DisoDeepPF is useful to your research!**
+
+**[http://3disodeeppf.com/](http://3disodeeppf.com/)** | **[http://3disogalaxy.com/](http://3disogalaxy.com/)**
 
 </div>
